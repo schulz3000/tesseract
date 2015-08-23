@@ -188,3 +188,5 @@ pip-log.txt
 /*.Log
 *.sdsettings
 *.orig
+
+src/.vs/config/applicationhost.config

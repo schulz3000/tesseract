@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tesseract
+﻿namespace Tesseract
 {
-    public class MathHelper
+    public static class MathHelper
     {
         /// <summary>
         /// Calculates the smallest integer greater than the quotant of dividend and divisor.
@@ -13,8 +9,8 @@ namespace Tesseract
         public static int DivRoundUp(int dividend, int divisor)
         {
             var result = dividend / divisor;
-            
-            
+
+
             return (dividend % divisor != 0 && divisor > 0 == dividend > 0) ? result + 1 : result;
         }
     }

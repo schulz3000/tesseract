@@ -321,10 +321,14 @@ namespace Tesseract
 		{
 			const string TessDataDirectory = "tessdata";
 			Guard.RequireNotNullOrEmpty("language", language);
-					
-			
-			// do some minor processing on datapath to fix some common errors (this basically mirrors what tesseract does as of 3.02)
-			if(!String.IsNullOrEmpty(datapath)) {
+
+            if (!DependencyChecker.IsVCRedist2012Installed())
+            {
+                throw new TesseractException(ErrorMessage.Format(2, "Visual Studio 2012 x86 & x64 Runtime is not installed."));
+            }
+
+            // do some minor processing on datapath to fix some common errors (this basically mirrors what tesseract does as of 3.02)
+            if (!String.IsNullOrEmpty(datapath)) {
 				// remove any trialing '\' or '/' characters
 				if(datapath.EndsWith("\\", StringComparison.Ordinal) || datapath.EndsWith("/", StringComparison.Ordinal)) {
 					datapath = datapath.Substring(0, datapath.Length-1);
