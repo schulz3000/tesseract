@@ -16,21 +16,22 @@ namespace Tesseract
 
         static bool IsVCRedist2012InstalledByMsi()
         {
-            var productcode = Is64BitProzess ? "CF2BEA3C-26EA-32F8-AA9B-331F7E34BA97" : "BD95A8CD-1D9F-35AD-981A-3E7925026EBB";
-
-            return MsiQueryProductState(productcode) == INSTALLSTATE.INSTALLSTATE_DEFAULT;
+            var productcode = Is64BitProzess ? "{CF2BEA3C-26EA-32F8-AA9B-331F7E34BA97}" : "{BD95A8CD-1D9F-35AD-981A-3E7925026EBB}";
+            var productState = MsiQueryProductState(productcode);
+            return productState == INSTALLSTATE.INSTALLSTATE_DEFAULT || productState == INSTALLSTATE.INSTALLSTATE_LOCAL;
         }
 
         static bool IsVCRedist2012InstalledByRegistry()
         {
-            var regInstallKey = Registry.LocalMachine.GetValue(@"Software\Microsoft\VisualStudio\11.0\VC\Runtimes\" + (Is64BitProzess ? "x64" : "x86") + @"\Installed");
+            var regKey = Registry.LocalMachine.OpenSubKey(@"Software\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\" + (Is64BitProzess ? "x64" : "x86"));
+            var regInstallKey = regKey.GetValue("Installed");
 
             return regInstallKey != null && ((int)regInstallKey) == 1;
         }
 
         static bool IsVCRedist2012InstalledByFile()
         {
-            return File.Exists(@"%windir%\system32\msvcr110.dll");
+            return File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"system32\msvcr110.dll"));
         }
 
         static bool Is64BitProzess { get { return IntPtr.Size == 8; } }
